@@ -94,10 +94,13 @@
 (() => {
   const DESIGN_W_DEFAULT = 1920;
   const DESIGN_H_DEFAULT = 1080;
+  const MOBILE_W_DEFAULT = 390;
+  const MOBILE_H_DEFAULT = 844;
   const OVERLAY_HIDE_MS = 1800;
   const VALIDATE_ATTR = 'no_overflowing_text,no_overlapping_text,slide_sized_text';
   const FINE_POINTER_MQ = matchMedia('(hover: hover) and (pointer: fine)');
   const NARROW_MQ = matchMedia('(max-width: 640px)');
+  const MOBILE_LAYOUT_MQ = matchMedia('(max-width: 700px)');
   // Slide-authored controls that should keep a tap instead of it navigating.
   const INTERACTIVE_SEL = 'a[href], button, input, select, textarea, summary, label, video[controls], audio[controls], [role="button"], [onclick], [tabindex]:not([tabindex^="-"]), [contenteditable]:not([contenteditable="false" i])';
 
@@ -310,6 +313,8 @@
     }
     :host([no-rail]) .rail,
     :host([noscale]) .rail { display: none; }
+    :host([data-mobile-layout]) .rail,
+    :host([data-mobile-layout]) .rail-resize { display: none; }
     .rail[data-presenting] { display: none; }
     @media (max-width: 640px) {
       .rail, .rail-resize { display: none; }
@@ -561,7 +566,7 @@
   `;
 
   class DeckStage extends HTMLElement {
-    static get observedAttributes() { return ['width', 'height', 'noscale', 'no-rail']; }
+    static get observedAttributes() { return ['width', 'height', 'mobile-width', 'mobile-height', 'noscale', 'no-rail']; }
 
     constructor() {
       super();
@@ -595,6 +600,12 @@
     get designHeight() {
       return parseInt(this.getAttribute('height'), 10) || DESIGN_H_DEFAULT;
     }
+    get mobileWidth() {
+      return parseInt(this.getAttribute('mobile-width'), 10) || MOBILE_W_DEFAULT;
+    }
+    get mobileHeight() {
+      return parseInt(this.getAttribute('mobile-height'), 10) || MOBILE_H_DEFAULT;
+    }
 
     connectedCallback() {
       // Presenter-view popup loads deckUrl?_snthumb=...#N for its prev/cur/
@@ -606,6 +617,9 @@
       this._syncPrintPageRule();
       window.addEventListener('keydown', this._onKey);
       window.addEventListener('resize', this._onResize);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', this._onResize);
+      }
       window.addEventListener('mousemove', this._onMouseMove, { passive: true });
       window.addEventListener('message', this._onMessage);
       window.addEventListener('click', this._onDocClick, true);
@@ -621,10 +635,13 @@
         this._freezeStyle = document.createElement('style');
         this._freezeStyle.textContent = '*,*::before,*::after{transition-duration:0s !important}';
         document.head.appendChild(this._freezeStyle);
+        this.removeAttribute('data-mobile-layout');
+        this._setCanvasSize(this.designWidth, this.designHeight);
         this._slides.forEach((s) => s.setAttribute('data-deck-active', ''));
       };
       this._onAfterPrint = () => {
         this._applyIndex({ showOverlay: false, broadcast: false });
+        this._fit();
         if (this._freezeStyle) { this._freezeStyle.remove(); this._freezeStyle = null; }
       };
       window.addEventListener('beforeprint', this._onBeforePrint);
@@ -813,6 +830,9 @@
     disconnectedCallback() {
       window.removeEventListener('keydown', this._onKey);
       window.removeEventListener('resize', this._onResize);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', this._onResize);
+      }
       window.removeEventListener('mousemove', this._onMouseMove);
       window.removeEventListener('message', this._onMessage);
       window.removeEventListener('click', this._onDocClick, true);
@@ -833,10 +853,7 @@
 
     attributeChangedCallback() {
       if (this._canvas) {
-        this._canvas.style.width = this.designWidth + 'px';
-        this._canvas.style.height = this.designHeight + 'px';
-        this._canvas.style.setProperty('--deck-design-w', this.designWidth + 'px');
-        this._canvas.style.setProperty('--deck-design-h', this.designHeight + 'px');
+        this._setCanvasSize(this.designWidth, this.designHeight);
         if (this._rail) {
           this._rail.style.setProperty('--deck-aspect', this.designWidth + '/' + this.designHeight);
         }
@@ -855,10 +872,7 @@
 
       const canvas = document.createElement('div');
       canvas.className = 'canvas';
-      canvas.style.width = this.designWidth + 'px';
-      canvas.style.height = this.designHeight + 'px';
-      canvas.style.setProperty('--deck-design-w', this.designWidth + 'px');
-      canvas.style.setProperty('--deck-design-h', this.designHeight + 'px');
+      this._setCanvasSize(this.designWidth, this.designHeight, canvas);
 
       const slot = document.createElement('slot');
       slot.addEventListener('slotchange', this._onSlotChange);
@@ -1013,6 +1027,14 @@
           this._scaleThumbs();
         });
       }
+    }
+
+    _setCanvasSize(width, height, canvas = this._canvas) {
+      if (!canvas) return;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      canvas.style.setProperty('--deck-design-w', width + 'px');
+      canvas.style.setProperty('--deck-design-h', height + 'px');
     }
 
     /** @page must live in the document stylesheet — it's a no-op inside
@@ -1179,8 +1201,12 @@
       // corrects it.
       if (!this._railEnabled || !this._railVisible || this.hasAttribute('no-rail')
           || this.hasAttribute('noscale') || this._presenting || this._previewMode
-          || NARROW_MQ.matches) return 0;
+          || NARROW_MQ.matches || this._useMobileLayout()) return 0;
       return this._railPx || 0;
+    }
+
+    _useMobileLayout() {
+      return !this.hasAttribute('noscale') && MOBILE_LAYOUT_MQ.matches;
     }
 
     _fit() {
@@ -1190,20 +1216,27 @@
       // geometry — the scaled canvas is in shadow DOM, so the exporter's
       // resetTransformSelector can't reach .canvas.style.transform directly.
       if (this.hasAttribute('noscale')) {
+        this.removeAttribute('data-mobile-layout');
+        this._setCanvasSize(this.designWidth, this.designHeight);
         this._canvas.style.transform = 'none';
         if (stage) stage.style.left = '0';
         if (this._overlay) this._overlay.style.marginLeft = '0';
         return;
       }
+      const mobile = this._useMobileLayout();
+      this.toggleAttribute('data-mobile-layout', mobile);
+      const layoutWidth = mobile ? this.mobileWidth : this.designWidth;
+      const layoutHeight = mobile ? this.mobileHeight : this.designHeight;
+      this._setCanvasSize(layoutWidth, layoutHeight);
       const rw = this._railWidth();
       if (stage) stage.style.left = rw + 'px';
       // Overlay is centred on the viewport via left:50% + translate(-50%);
       // marginLeft shifts the centre by rw/2 so it lands in the middle of
       // the [rw, innerWidth] stage region.
       if (this._overlay) this._overlay.style.marginLeft = (rw / 2) + 'px';
-      const vw = window.innerWidth - rw;
-      const vh = window.innerHeight;
-      const s = Math.min(vw / this.designWidth, vh / this.designHeight);
+      const vw = (window.visualViewport ? window.visualViewport.width : window.innerWidth) - rw;
+      const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const s = Math.min(vw / layoutWidth, vh / layoutHeight);
       this._canvas.style.transform = `scale(${s})`;
     }
 

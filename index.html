@@ -278,6 +278,8 @@
 		<deck-stage
 			width="1920"
 			height="1080"
+			mobile-width="390"
+			mobile-height="844"
 		>
 			<!-- ================= SLIDE 1 — COVER ================= -->
 			<section
@@ -2152,6 +2154,488 @@
 				justify-content: center;
 				font-size: 18px;
 				font-weight: 700;
+			}
+
+			/* ---- mobile portrait deck ---- */
+			deck-stage[data-mobile-layout] {
+				--type-display: 38px;
+				--type-title: 30px;
+				--type-subtitle: 19px;
+				--type-body: 18px;
+				--type-small: 13px;
+				--type-eyebrow: 10px;
+				--pad-x: 22px;
+				--pad-top: 26px;
+				--pad-bottom: 28px;
+			}
+
+			deck-stage[data-mobile-layout] .slide {
+				gap: 0;
+			}
+
+			deck-stage[data-mobile-layout] .head {
+				gap: 12px;
+				flex: 0 0 auto;
+			}
+
+			deck-stage[data-mobile-layout] .eyebrow {
+				gap: 8px;
+				letter-spacing: 0.08em;
+				line-height: 1.3;
+				flex-wrap: wrap;
+			}
+
+			deck-stage[data-mobile-layout] .eyebrow .bar {
+				width: 24px;
+			}
+
+			deck-stage[data-mobile-layout] .title,
+			deck-stage[data-mobile-layout] .lead {
+				max-width: 100% !important;
+			}
+
+			deck-stage[data-mobile-layout] .lead {
+				line-height: 1.28;
+			}
+
+			deck-stage[data-mobile-layout] .grow {
+				min-height: 0;
+			}
+
+			deck-stage[data-mobile-layout] .grow[style*='display: grid'] {
+				grid-template-columns: 1fr !important;
+				gap: 14px !important;
+				align-content: start !important;
+				align-items: stretch !important;
+				margin-top: 16px !important;
+			}
+
+			deck-stage[data-mobile-layout] .card {
+				border-radius: 12px;
+				padding: 16px !important;
+			}
+
+			deck-stage[data-mobile-layout] .mono-tag {
+				line-height: 1.25;
+			}
+
+			deck-stage[data-mobile-layout] [style*='font-size: 80px'] {
+				font-size: 38px !important;
+				line-height: 1.06 !important;
+			}
+
+			deck-stage[data-mobile-layout] [style*='font-size: 64px'] {
+				font-size: 34px !important;
+			}
+
+			deck-stage[data-mobile-layout] [style*='font-size: 52px'] {
+				font-size: 30px !important;
+			}
+
+			deck-stage[data-mobile-layout] [style*='font-size: 42px'] {
+				font-size: 22px !important;
+			}
+
+			deck-stage[data-mobile-layout] [style*='font-size: 40px'] {
+				font-size: 19px !important;
+			}
+
+			deck-stage[data-mobile-layout] [style*='font-size: 34px'] {
+				font-size: 20px !important;
+			}
+
+			deck-stage[data-mobile-layout] [style*='font-size: 30px'] {
+				font-size: 17px !important;
+			}
+
+			deck-stage[data-mobile-layout] .footer-mark {
+				left: var(--pad-x);
+				bottom: 16px;
+				font-size: 10px;
+				gap: 8px;
+				letter-spacing: 0.06em;
+			}
+
+			deck-stage[data-mobile-layout] .dot {
+				width: 6px;
+				height: 6px;
+			}
+
+			deck-stage[data-mobile-layout] section[data-label='Cover'] .grow {
+				justify-content: center !important;
+				max-width: 100% !important;
+			}
+
+			deck-stage[data-mobile-layout] section[data-label='Cover'] h1 {
+				line-height: 1.05 !important;
+			}
+
+			deck-stage[data-mobile-layout] section[data-label='Cover'] .lead {
+				margin-top: 18px !important;
+			}
+
+			deck-stage[data-mobile-layout] section[data-label='Cover'] .slide > .anim.d3 {
+				display: grid !important;
+				grid-template-columns: 1fr;
+				gap: 12px !important;
+				align-items: start !important;
+				padding-top: 16px !important;
+			}
+
+			deck-stage[data-mobile-layout] .pain {
+				gap: 10px;
+				padding: 12px 0;
+				font-size: 17px;
+				line-height: 1.22;
+			}
+
+			deck-stage[data-mobile-layout] .pain .pn {
+				font-size: 12px;
+			}
+
+			deck-stage[data-mobile-layout] section[data-label='Чому ця ідея'] svg {
+				width: 24px;
+				height: 26px;
+			}
+
+			deck-stage[data-mobile-layout] section[data-label='Існуючі рішення'] .grow {
+				grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+				gap: 10px !important;
+			}
+
+			deck-stage[data-mobile-layout] .cmp {
+				min-height: 0;
+				padding: 14px !important;
+			}
+
+			deck-stage[data-mobile-layout] .cmp-name {
+				font-size: 21px;
+			}
+
+			deck-stage[data-mobile-layout] .cmp-sub {
+				font-size: 11px;
+				margin-top: 5px;
+			}
+
+			deck-stage[data-mobile-layout] .cmp-list {
+				gap: 6px;
+				margin-top: 12px;
+			}
+
+			deck-stage[data-mobile-layout] .cmp-list li {
+				font-size: 12px;
+				line-height: 1.22;
+				padding-left: 17px;
+			}
+
+			deck-stage[data-mobile-layout] .cmp-list li::before {
+				font-size: 14px;
+			}
+
+			deck-stage[data-mobile-layout] section[data-label='Існуючі рішення'] .slide > .anim.d4 {
+				flex-direction: column;
+				align-items: flex-start !important;
+				gap: 6px !important;
+				margin-top: 12px !important;
+				font-size: 13px !important;
+				line-height: 1.3;
+			}
+
+			deck-stage[data-mobile-layout] .eco {
+				width: 100%;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				grid-template-rows: none;
+				gap: 8px;
+			}
+
+			deck-stage[data-mobile-layout] .eco-cell,
+			deck-stage[data-mobile-layout] .eco-hub {
+				min-height: 62px;
+				border-radius: 10px;
+				padding: 11px 12px;
+				font-size: 18px;
+			}
+
+			deck-stage[data-mobile-layout] .eco-hub {
+				grid-column: 1 / -1;
+				min-height: 76px;
+			}
+
+			deck-stage[data-mobile-layout] .eco-k,
+			deck-stage[data-mobile-layout] .eco-hub-k {
+				font-size: 11px;
+				margin-bottom: 5px;
+			}
+
+			deck-stage[data-mobile-layout] .eco-hub-t {
+				font-size: 22px;
+			}
+
+			deck-stage[data-mobile-layout] .adv {
+				display: grid;
+				grid-template-columns: 32px minmax(0, 1fr);
+				grid-template-areas:
+					'icon title'
+					'icon desc';
+				gap: 4px 10px;
+				min-height: 0;
+				padding: 13px !important;
+			}
+
+			deck-stage[data-mobile-layout] .adv-ic {
+				grid-area: icon;
+				width: 28px;
+				height: 28px;
+				margin: 1px 0 0;
+			}
+
+			deck-stage[data-mobile-layout] .adv-t {
+				grid-area: title;
+				font-size: 17px;
+				margin-top: 0;
+			}
+
+			deck-stage[data-mobile-layout] .adv-d {
+				grid-area: desc;
+				font-size: 13px;
+				line-height: 1.25;
+				margin-top: 0;
+			}
+
+			deck-stage[data-mobile-layout] .vs {
+				gap: 8px;
+			}
+
+			deck-stage[data-mobile-layout] .vs li {
+				font-size: 14px;
+				line-height: 1.28;
+				padding-left: 22px;
+			}
+
+			deck-stage[data-mobile-layout] .eq {
+				width: 100%;
+				flex-direction: column;
+				gap: 8px;
+			}
+
+			deck-stage[data-mobile-layout] .eq-card {
+				width: auto;
+				min-height: 0;
+			}
+
+			deck-stage[data-mobile-layout] .eq-num {
+				font-size: 27px;
+				margin: 8px 0 4px;
+			}
+
+			deck-stage[data-mobile-layout] .eq-sub {
+				font-size: 13px;
+			}
+
+			deck-stage[data-mobile-layout] .eq-op {
+				justify-content: center;
+				font-size: 20px;
+				line-height: 1;
+			}
+
+			deck-stage[data-mobile-layout] section[data-label='Інвестмодель'] .slide > .anim.d4 {
+				align-items: flex-start !important;
+				font-size: 13px !important;
+				line-height: 1.3;
+				margin-top: 12px;
+			}
+
+			deck-stage[data-mobile-layout] .perk {
+				gap: 10px;
+				padding: 10px 0;
+			}
+
+			deck-stage[data-mobile-layout] .perk .pk-ic {
+				width: 24px;
+				height: 24px;
+				font-size: 13px;
+			}
+
+			deck-stage[data-mobile-layout] .perk b {
+				font-size: 16px;
+			}
+
+			deck-stage[data-mobile-layout] .perk span {
+				font-size: 13px;
+				line-height: 1.25;
+				margin-top: 3px;
+			}
+
+			deck-stage[data-mobile-layout] .sectors {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 8px;
+			}
+
+			deck-stage[data-mobile-layout] .sec {
+				border-radius: 10px;
+				padding: 13px 14px;
+				font-size: 16px;
+			}
+
+			deck-stage[data-mobile-layout] .scale-row {
+				gap: 10px;
+			}
+
+			deck-stage[data-mobile-layout] .scale-bar {
+				height: 30px;
+				border-radius: 7px;
+				min-width: 82px;
+			}
+
+			deck-stage[data-mobile-layout] .scale-lbl {
+				font-size: 14px;
+				line-height: 1.25;
+			}
+
+			deck-stage[data-mobile-layout] .chart {
+				height: 260px;
+				padding-top: 30px;
+			}
+
+			deck-stage[data-mobile-layout] .chart-grid {
+				inset: 30px 0 44px 0;
+			}
+
+			deck-stage[data-mobile-layout] .bars {
+				gap: 14px;
+				padding: 0 8px;
+			}
+
+			deck-stage[data-mobile-layout] .bar-col .bar {
+				max-width: 64px;
+				border-radius: 8px 8px 0 0;
+			}
+
+			deck-stage[data-mobile-layout] .bar-val {
+				font-size: 17px;
+				margin-bottom: 8px;
+			}
+
+			deck-stage[data-mobile-layout] .bar-x {
+				font-size: 12px;
+				margin-top: 8px;
+				text-align: center;
+			}
+
+			deck-stage[data-mobile-layout] .lic {
+				min-height: 0;
+			}
+
+			deck-stage[data-mobile-layout] .lic-top {
+				gap: 10px;
+			}
+
+			deck-stage[data-mobile-layout] .lic-clients {
+				font-size: 13px;
+			}
+
+			deck-stage[data-mobile-layout] .lic-num {
+				font-size: 32px;
+				margin: 12px 0 14px;
+			}
+
+			deck-stage[data-mobile-layout] .lic-bar {
+				height: 8px;
+			}
+
+			deck-stage[data-mobile-layout] .lic-foot {
+				font-size: 13px;
+				margin-top: 12px;
+			}
+
+			deck-stage[data-mobile-layout] .succ {
+				display: grid;
+				grid-template-columns: 38px minmax(0, 1fr);
+				align-items: center;
+				min-height: 0;
+				padding: 14px !important;
+				gap: 10px;
+			}
+
+			deck-stage[data-mobile-layout] .succ-n {
+				font-size: 17px;
+			}
+
+			deck-stage[data-mobile-layout] .succ-t {
+				font-size: 17px;
+				line-height: 1.22;
+			}
+
+			deck-stage[data-mobile-layout] .timeline {
+				flex-direction: column;
+				gap: 14px;
+				padding: 12px 0 0;
+			}
+
+			deck-stage[data-mobile-layout] .tl-line {
+				top: 14px;
+				bottom: 8px;
+				left: 7px;
+				right: auto;
+				width: 2px;
+				height: auto;
+			}
+
+			deck-stage[data-mobile-layout] .tl-item {
+				width: 100%;
+				min-height: 58px;
+				padding-left: 30px;
+			}
+
+			deck-stage[data-mobile-layout] .tl-dot {
+				position: absolute;
+				left: 0;
+				top: 4px;
+				width: 14px;
+				height: 14px;
+			}
+
+			deck-stage[data-mobile-layout] .tl-k {
+				font-size: 12px;
+				margin-top: 0;
+			}
+
+			deck-stage[data-mobile-layout] .tl-t {
+				font-size: 17px;
+				line-height: 1.2;
+				margin-top: 4px;
+			}
+
+			deck-stage[data-mobile-layout] .getlist {
+				margin-top: 12px;
+			}
+
+			deck-stage[data-mobile-layout] .getlist li {
+				font-size: 15px;
+				line-height: 1.25;
+				padding: 12px 0 12px 25px;
+			}
+
+			deck-stage[data-mobile-layout] .getlist li::before {
+				top: 11px;
+				font-size: 15px;
+			}
+
+			deck-stage[data-mobile-layout] .fin {
+				gap: 10px;
+				padding: 12px 0;
+				font-size: 17px;
+				line-height: 1.22;
+			}
+
+			deck-stage[data-mobile-layout] .fin .fin-ic {
+				width: 24px;
+				height: 24px;
+				font-size: 13px;
+			}
+
+			deck-stage[data-mobile-layout] section[data-label='Фінал'] .lead {
+				margin-top: 16px !important;
 			}
 		</style>
 
